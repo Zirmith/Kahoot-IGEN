@@ -17,7 +17,7 @@ const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 // API endpoint to process image and generate description
 app.post('/identify-image', async (req, res) => {
     try {
-        const { imageUrl } = req.body;
+        const { imageUrl, extraText, answerChoices } = req.body;
         if (!imageUrl) {
             return res.status(400).json({ error: 'Image URL is required' });
         }
@@ -28,6 +28,15 @@ app.post('/identify-image', async (req, res) => {
         // Get generative model
         const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
+        // Create the prompt with extra text and answer choices if provided
+        let prompt = 'Identify this image. No extra details, only what the image is.';
+        if (extraText) {
+            prompt = `${extraText} ${prompt}`;
+        }
+        if (answerChoices && Array.isArray(answerChoices)) {
+            prompt += ` Here are the possible answers: ${answerChoices.join(', ')}.`;
+        }
+
         // Generate AI response
         const result = await model.generateContent([
             {
@@ -36,11 +45,11 @@ app.post('/identify-image', async (req, res) => {
                     mimeType: 'image/jpeg',
                 },
             },
-            'Identify this image  no extra details only what the image is .',
+            prompt,
         ]);
 
         // Send clean response
-        res.json({ description: result.response.text() });
+        res.json({ description: result.response.text().trim() });
     } catch (error) {
         console.error('Error processing image:', error);
         res.status(500).json({ error: 'Failed to identify image' });
