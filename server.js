@@ -40,7 +40,7 @@ app.post('/identify-image', async (req, res) => {
         ]);
 
         // Send clean response
-        res.json({ description: result.response.text.trim() });
+        res.json({ description: result.response.text() });
     } catch (error) {
         console.error('Error processing image:', error);
         res.status(500).json({ error: 'Failed to identify image' });
