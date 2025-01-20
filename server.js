@@ -34,7 +34,7 @@ app.post('/identify-image', async (req, res) => {
             prompt = `${extraText} ${prompt}`;
         }
         if (answerChoices && Array.isArray(answerChoices)) {
-            prompt += ` Here are the possible answers: ${answerChoices.join(', ')}.`;
+            prompt += ` Here are the possible answers: ${answerChoices.join(', ')}. answer only the correct answer`;
         }
 
         // Generate AI response
