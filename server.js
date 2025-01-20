@@ -29,7 +29,7 @@ app.post('/identify-image', async (req, res) => {
         const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
         // Create the prompt with extra text and answer choices if provided
-        let prompt = 'Identify this image. No extra details, only what the image is.';
+        let prompt = extraText;
         if (extraText) {
             prompt = `${extraText} ${prompt}`;
         }
