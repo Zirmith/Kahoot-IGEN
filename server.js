@@ -14,6 +14,11 @@ app.use(express.json());
 // Initialize Google Generative AI
 const genAI = new GoogleGenerativeAI(process.env.API_KEY);
 
+
+app.get('/', async (req, res) => {
+    res.json({message: "Hello"})
+})
+
 // API endpoint to process image and generate description
 app.post('/identify-image', async (req, res) => {
     try {
